@@ -42,7 +42,6 @@ const columns: DataTableColumn<PipelineRun>[] = [
     render: function RunStatus(row) {
       return <StatusInline status={row.status} size="small" />;
     },
-    sx: { width: (theme) => theme.spacing(3) },
   },
   {
     id: "started_time",
@@ -257,6 +256,13 @@ export const PipelineRunTable: React.FC<{
       initialOrderBy="pipeline_run_index"
       initialOrder="desc"
       initialRowsPerPage={10}
+      refreshInterval={(rows) => {
+        return rows.some((row) =>
+          ["STARTED", "PAUSED", "PENDING"].includes(row.status)
+        )
+          ? 2000
+          : null;
+      }}
     />
   );
 };
