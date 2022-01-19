@@ -4,6 +4,10 @@ metadata:
   name: {{ template "library.metadata.name" . }}
   namespace: {{ .Release.Namespace }}
   annotations:
+    {{ if .Values.service.dev }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/upstream-vhost: {{ .Values.service.externalName }}
+    {{ end }}
     nginx.ingress.kubernetes.io/auth-url: {{ include "library.service.auth" . }}
 spec:
   rules:

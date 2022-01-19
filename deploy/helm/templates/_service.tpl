@@ -25,12 +25,16 @@ kind: Service
 metadata:
   {{- include "library.metadata" . | nindent 4 }}
 spec:
-  type: {{ template "library.service.type" . }}
+  type: {{ include "library.service.type" . }}
+  {{ if .Values.service.dev }}
+  externalName: {{ .Values.service.externalName }}
+  {{ else }}
   ports:
   - port: {{ template "library.service.port" . }}
     protocol: TCP
   selector:
     {{- include "library.labels.selector" . | nindent 4 }}
+  {{ end }}
 {{- end }}
 
 {{/*
